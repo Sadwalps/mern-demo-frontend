@@ -1,11 +1,26 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Add from './Add';
 import Edit from './Edit';
 import Delete from './Delete';
+import { getDataAPI } from './service/allApi';
+import { addResponseContext } from './context/ContextShare';
 
 function Home() {
+    const {addResponse} = useContext(addResponseContext)
+    const [allData, setAllData] = useState([])
+    console.log(allData);
+
+    const getAllData = async () => {
+        const result = await getDataAPI()
+        setAllData(result.data)
+    }
+
+    useEffect(() => {
+        getAllData()
+    }, [addResponse])
+
     return (
         <>
             {/* header */}
@@ -35,37 +50,37 @@ function Home() {
             {/* Images section */}
             <div className='container-fluid pt-4 pb-4'>
                 <h1 className='text-center text-info'>Images</h1>
-                <div className="row mt-4">
+                {allData?.map((item)=>(<div className="row mt-4">
                     <div className="col-md-2"></div>
                     <div className="col-md-8">
                         <div className="row border border-3 border-info ">
-                            <div className="col-md-4"> <img src="https://static.vecteezy.com/system/resources/thumbnails/049/860/844/small_2x/solitary-tree-on-a-green-hilltop-with-mountain-view-photo.jpeg" alt="" className='w-100 py-1' /></div>
+                            <div className="col-md-4"> <img src={item?.imgurl} alt="" className='w-100 py-1' /></div>
                             <div className="col-md-8  text-center d-flex flex-column justify-content-center align-items-center">
-                                <h3 className=''>title</h3>
-                                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Necessitatibus molestias dignissimos reprehenderit, neque optio cumque voluptatum in itaque voluptas illo.</p>
+                                <h3 className=''>{item?.title}</h3>
+                                <p>{item?.description}</p>
                             </div>
                             <div>
                                 <div className="row ">
                                     <div className="col-6 p-0"><Edit /> </div>
-                                    <div className="col-6 p-0"><Delete /></div>
+                                    <div className="col-6 p-0"><Delete item={item} /></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="col-md-2"></div>
-                </div>
+                </div>))}
             </div>
             {/* Footer */}
             <div className='my-2 bg-dark text-info py-3'>
-                
-                     
+
+
                 <marquee behavior="" direction="">
                     <h3>
-                     Capturing timeless moments, one frame at a time
-                </h3>
+                        Capturing timeless moments, one frame at a time
+                    </h3>
                 </marquee>
-               
-               
+
+
             </div>
         </>
     )

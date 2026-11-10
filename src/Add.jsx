@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { addDataAPI } from './service/allApi';
+import { addResponseContext } from './context/ContextShare';
 
 function Add() {
+    const {setAddResponse} = useContext(addResponseContext)
     const [show, setShow] = useState(false);
     const [data, setData] = useState({
         imgurl: "",
@@ -13,7 +15,11 @@ function Add() {
     })
     console.log(data);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        handleCancel()
+    }
+
     const handleShow = () => setShow(true);
     const handleCancel = () => {
         setData({
@@ -36,6 +42,10 @@ function Add() {
             const result = await addDataAPI(reqBody)
             if (result.status == 200) {
                 alert(`Image successfully added`)
+                setTimeout(() => {
+                    handleClose()
+                }, 1000);
+                setAddResponse(result)
             } else if (result.status == 406) {
                 alert(result.response.data)
             } else {
