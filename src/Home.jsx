@@ -5,10 +5,12 @@ import Add from './Add';
 import Edit from './Edit';
 import Delete from './Delete';
 import { getDataAPI } from './service/allApi';
-import { addResponseContext } from './context/ContextShare';
+import { addResponseContext, deleteResponseContext, editResponseContext } from './context/ContextShare';
 
 function Home() {
-    const {addResponse} = useContext(addResponseContext)
+    const { addResponse } = useContext(addResponseContext)
+    const { deleteResponse } = useContext(deleteResponseContext)
+    const { editResponse } = useContext(editResponseContext)
     const [allData, setAllData] = useState([])
     console.log(allData);
 
@@ -19,7 +21,7 @@ function Home() {
 
     useEffect(() => {
         getAllData()
-    }, [addResponse])
+    }, [addResponse, deleteResponse, editResponse])
 
     return (
         <>
@@ -46,11 +48,10 @@ function Home() {
                 </div>
             </div>
 
-
             {/* Images section */}
             <div className='container-fluid pt-4 pb-4'>
                 <h1 className='text-center text-info'>Images</h1>
-                {allData?.map((item)=>(<div className="row mt-4">
+                {allData?.map((item) => (<div className="row mt-4">
                     <div className="col-md-2"></div>
                     <div className="col-md-8">
                         <div className="row border border-3 border-info ">
@@ -61,7 +62,7 @@ function Home() {
                             </div>
                             <div>
                                 <div className="row ">
-                                    <div className="col-6 p-0"><Edit /> </div>
+                                    <div className="col-6 p-0"><Edit item={item} /> </div>
                                     <div className="col-6 p-0"><Delete item={item} /></div>
                                 </div>
                             </div>
@@ -73,14 +74,11 @@ function Home() {
             {/* Footer */}
             <div className='my-2 bg-dark text-info py-3'>
 
-
                 <marquee behavior="" direction="">
                     <h3>
                         Capturing timeless moments, one frame at a time
                     </h3>
                 </marquee>
-
-
             </div>
         </>
     )

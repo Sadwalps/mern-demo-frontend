@@ -6,7 +6,7 @@ import { addDataAPI } from './service/allApi';
 import { addResponseContext } from './context/ContextShare';
 
 function Add() {
-    const {setAddResponse} = useContext(addResponseContext)
+    const { setAddResponse } = useContext(addResponseContext)
     const [show, setShow] = useState(false);
     const [data, setData] = useState({
         imgurl: "",
@@ -28,6 +28,7 @@ function Add() {
             description: ""
         })
     }
+
     const handleAdd = async () => {
         const { imgurl, title, description } = data
         console.log(imgurl, title, description);
